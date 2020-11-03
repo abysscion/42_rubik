@@ -1,3 +1,6 @@
+####################################################################################
+WINDOWS BUILD GUIDE:
+
 # Get nuget.exe command line
 wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe -OutFile nuget.exe
 
@@ -8,7 +11,20 @@ wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe -OutFile nuget.
 .\Microsoft.Net.Compilers.%YOUR VERSION%\tools\csc.exe *.cs
 
 # Run it
-.\Rubik.exe
+.\Rubik.exe "F R U B L D"
+####################################################################################
+MAC OS BUILD GUIDE:
+
+# Get from homebrew or install from (https://www.mono-project.com/)
+brew install mono
+
+# Compile
+mcs *.cs
+
+# Run
+mono Rubik.exe "F R U B L D"
+
+####################################################################################
 
 Launch with command sequence as arguments to get instant solve.
 
