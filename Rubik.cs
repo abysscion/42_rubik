@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Diagnostics;
 
 namespace Rubik
@@ -32,7 +31,7 @@ namespace Rubik
       Halfturn = 2
    }
 
-   internal static class Program
+   internal static class Rubik
    {
       private static void Main(string[] args)
       {
@@ -40,35 +39,52 @@ namespace Rubik
          var solver = new RubikSolver(cube);
          var keyInfo = new ConsoleKeyInfo();
          
+         if (args.Length != 0)
+         {
+            cube.RotateByCommandSequence(args[0]);
+            solver.SolveStep0();
+            solver.SolveStep1();
+            solver.SolveStep2();
+            solver.SolveStep3();
+            solver.SolveStep4();
+            foreach (var rotation in solver.GetRotationsArray())
+               Console.Write(RubikUtil.RotationCommandToText(rotation) + " ");
+            return;
+         }
+
          Console.WriteLine("*DIRECT CONTROL MODE*\n");
          RubikUtil.PrintSidesData(cube);
          while (keyInfo.Key != ConsoleKey.Escape)
          {
             keyInfo = Console.ReadKey(true);
-            // Console.Clear();
+            Console.Clear();
          
             if (keyInfo.Key != ConsoleKey.Tab)
             {
                Console.WriteLine("*DIRECT CONTROL MODE*\n");
-               HandleControl(keyInfo, ref cube, ref solver);
+               HandleControl(keyInfo, ref cube);
                RubikUtil.PrintSidesData(cube);
             }
             else
             {
                Console.WriteLine("*COMMAND SEQUENCE INPUT MODE*\n");
                RubikUtil.PrintSidesData(cube);
-               var str = Console.ReadLine();
-               cube.RotateByCommandSequence(str);
-               // Console.Clear();
+               
+               cube.RotateByCommandSequence(Console.ReadLine());
+               Console.WriteLine("\nPress any key...\n");
+               Console.ReadKey();
+               
+               Console.Clear();
                Console.WriteLine("*DIRECT CONTROL MODE*\n");
                RubikUtil.PrintSidesData(cube);
             }
          }
       }
 
-      private static void HandleControl(ConsoleKeyInfo key, ref RubikCube cube, ref RubikSolver solver)
+      private static void HandleControl(ConsoleKeyInfo key, ref RubikCube cube)
       {
          var shiftPressed = (key.Modifiers & ConsoleModifiers.Shift) != 0;
+         var solver = new RubikSolver(cube);
 
          switch (key.Key)
          {
@@ -85,34 +101,18 @@ namespace Rubik
                   Console.Write(RubikUtil.RotationCommandToText(rotation) + " ");
                Console.WriteLine();
                break;
-            case ConsoleKey.X:
-               foreach (var rotation in solver.GetRotationsArray())
-                  Console.Write(RubikUtil.RotationCommandToText(rotation) + " ");
-               Console.WriteLine();
-               break;
-            case ConsoleKey.C:
-               foreach (var rotation in solver.GetRotationsArray(true))
-                  Console.Write(RubikUtil.RotationCommandToText(rotation) + " ");
-               Console.WriteLine();
-               break;
             case ConsoleKey.Q:
                cube = new RubikCube();
-               solver = new RubikSolver(cube);
-               
-               if (shiftPressed)
-               {
-                  var r = new Random();
+               var r = new Random();
 
-                  for (var i = 0; i < 20; i++)
-                  {
-                     var command = ((RSide) r.Next(0, 6), (RotationType) r.Next(0, 3));
-                     cube.RotateSide(command);
-                     Console.Write(RubikUtil.RotationCommandToText(command) + " ");
-                  }
-                  Console.WriteLine();
+               for (var i = 0; i < 20; i++)
+               {
+                  var command = ((RSide) r.Next(0, 6), (RotationType) r.Next(0, 3));
+                  cube.RotateSide(command);
+                  Console.Write(RubikUtil.RotationCommandToText(command) + " ");
                }
+               Console.WriteLine();
                break;
-            
             case ConsoleKey.G:
                cube.RotateSide(RSide.Left, shiftPressed);
                break;
@@ -140,7 +140,6 @@ namespace Rubik
          long totalTime = 0;
          var sw = Stopwatch.StartNew();
          var rnd = new Random();
-         var totalTurnsCountNormalized = 0;
          var totalTurnsCount = 0;
          var totalTurnsStep0 = 0;
          var totalTurnsStep1 = 0;
@@ -164,30 +163,19 @@ namespace Rubik
             s.SolveStep4();
 
             totalTime += sw.ElapsedMilliseconds;
-            totalTurnsCountNormalized += s.GetRotationsArray(true).Length;
             totalTurnsCount += s.TotalRotationsCount;
             totalTurnsStep0 += s.RotationsCountStep0;
             totalTurnsStep1 += s.RotationsCountStep1;
             totalTurnsStep2 += s.RotationsCountStep2;
             totalTurnsStep3 += s.RotationsCountStep3;
             totalTurnsStep4 += s.RotationsCountStep3;
-
-            foreach (var side in r.Sides)
-            {
-               var centerColor = side.Faces[1, 1].Color;
-               foreach (var face in side.Faces)
-               {
-                  if (face.Color != centerColor)
-                     Console.WriteLine("BUG! RUBIK IS NOT COMPLETE");
-               }
-            }
          }
 
          sw.Stop();
          Console.WriteLine(
-            "\nTests: {0}\nAverage time to solve: {1}ms\nAverage turns to solve: {2}\nAverage normalized turns to solve: {3}\nAverage turns for:\n" +
-            "\tStep 0: {4}\n\tStep 1: {5}\n\tStep 2: {6}\n\tStep 3: {7}\n\tStep 4: {8}", testsCount,
-            totalTime * 1f / testsCount, totalTurnsCount / testsCount, totalTurnsCountNormalized / testsCount,
+            "\nTests: {0}\nAverage time to solve: {1}ms\nAverage turns to solve: {2}\nAverage turns for:\n" +
+            "\tStep 0: {3}\n\tStep 1: {4}\n\tStep 2: {5}\n\tStep 3: {6}\n\tStep 4: {7}\n", testsCount,
+            totalTime * 1f / testsCount, totalTurnsCount / testsCount,
             totalTurnsStep0 / testsCount, totalTurnsStep1 / testsCount, totalTurnsStep2 / testsCount,
             totalTurnsStep3 / testsCount, totalTurnsStep4 / testsCount);
       }

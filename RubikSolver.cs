@@ -45,24 +45,13 @@ namespace Rubik
             _fCenterColor = _fFaces[1, 1].Color;
             _bCenterColor = _bFaces[1, 1].Color;
         }
-        
-        public (RSide, RotationType)[] GetRotationsArray(bool normalized = false)
+
+        public (RSide, RotationType)[] GetRotationsArray()
         {
             var rotations = new (RSide, RotationType)[_rotationsMade.Count];
 
-            if (!normalized || _rotationsMade.Count < 4)
-                _rotationsMade.CopyTo(rotations);
-            else
-            {
-                var lst = _rotationsMade.ToList();
-                var buf = new[] {lst[0], lst[1], lst[2], lst[3]};
-                
-                TurnsNormalizer.RemoveUselessQuadruplets(ref lst, ref buf);
-                TurnsNormalizer.ReplaceTripletsForOneOpposingTurn(ref lst, ref buf);
-                TurnsNormalizer.ReplaceUselessDoublets(ref lst, ref buf);
+            _rotationsMade.CopyTo(rotations);
 
-                rotations = lst.ToArray();
-            }
             return rotations;
         }
 

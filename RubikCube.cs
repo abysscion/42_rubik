@@ -53,11 +53,15 @@ namespace Rubik
                     break;
             }
         }
-        
+
         public void RotateByCommandSequence(string commandSequence)
         {
             if (!_commandSequenceFilter.IsMatch(commandSequence))
-                throw new Exception("COMMAND SEQUENCE IS INVALID");
+            {
+                Console.WriteLine("Error: command sequence is invalid!");
+                return;
+            }
+
             foreach (var txt in commandSequence.Split(' '))
             {
                 var (rotationType, targetSide) = RubikUtil.TextToRotationCommand(txt);
