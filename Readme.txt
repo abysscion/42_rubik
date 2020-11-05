@@ -1,27 +1,27 @@
 ####################################################################################
-WINDOWS BUILD GUIDE:
+# WINDOWS BUILD GUIDE:
 
-# Get nuget.exe command line
+# 1) Get nuget.exe command line
 wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe -OutFile nuget.exe
 
-# Download the C# Roslyn compiler
+# 2) Download the C# Roslyn compiler
 .\nuget.exe install Microsoft.Net.Compilers
 
-# Compile
+# 3) Compile
 .\Microsoft.Net.Compilers.%YOUR VERSION%\tools\csc.exe *.cs
 
-# Run it
+# 4) Run it
 .\Rubik.exe "F R U B L D"
 ####################################################################################
-MAC OS BUILD GUIDE:
+# MAC OS BUILD GUIDE:
 
-# Get from homebrew or install from (https://www.mono-project.com/)
+# 1) Get from homebrew or install from (https://www.mono-project.com/)
 brew install mono
 
-# Compile
+# 2) Compile
 mcs *.cs
 
-# Run
+# 3) Run
 mono Rubik.exe "F R U B L D"
 
 ####################################################################################

@@ -35,49 +35,56 @@ namespace Rubik
    {
       private static void Main(string[] args)
       {
-         var cube = new RubikCube();
-         var solver = new RubikSolver(cube);
-         var keyInfo = new ConsoleKeyInfo();
-         
-         if (args.Length != 0)
+         try
          {
-            cube.RotateByCommandSequence(args[0]);
-            solver.SolveStep0();
-            solver.SolveStep1();
-            solver.SolveStep2();
-            solver.SolveStep3();
-            solver.SolveStep4();
-            foreach (var rotation in solver.GetRotationsArray())
-               Console.Write(RubikUtil.RotationCommandToText(rotation) + " ");
-            return;
-         }
+            var cube = new RubikCube();
+            var solver = new RubikSolver(cube);
+            var keyInfo = new ConsoleKeyInfo();
 
-         Console.WriteLine("*DIRECT CONTROL MODE*\n");
-         RubikUtil.PrintSidesData(cube);
-         while (keyInfo.Key != ConsoleKey.Escape)
-         {
-            keyInfo = Console.ReadKey(true);
-            Console.Clear();
-         
-            if (keyInfo.Key != ConsoleKey.Tab)
+            if (args.Length != 0)
             {
-               Console.WriteLine("*DIRECT CONTROL MODE*\n");
-               HandleControl(keyInfo, ref cube);
-               RubikUtil.PrintSidesData(cube);
+               cube.RotateByCommandSequence(args[0]);
+               solver.SolveStep0();
+               solver.SolveStep1();
+               solver.SolveStep2();
+               solver.SolveStep3();
+               solver.SolveStep4();
+               foreach (var rotation in solver.GetRotationsArray())
+                  Console.Write(RubikUtil.RotationCommandToText(rotation) + " ");
+               return;
             }
-            else
+
+            Console.WriteLine("*DIRECT CONTROL MODE*\n");
+            RubikUtil.PrintSidesData(cube);
+            while (keyInfo.Key != ConsoleKey.Escape)
             {
-               Console.WriteLine("*COMMAND SEQUENCE INPUT MODE*\n");
-               RubikUtil.PrintSidesData(cube);
-               
-               cube.RotateByCommandSequence(Console.ReadLine());
-               Console.WriteLine("\nPress any key...\n");
-               Console.ReadKey();
-               
+               keyInfo = Console.ReadKey(true);
                Console.Clear();
-               Console.WriteLine("*DIRECT CONTROL MODE*\n");
-               RubikUtil.PrintSidesData(cube);
+
+               if (keyInfo.Key != ConsoleKey.Tab)
+               {
+                  Console.WriteLine("*DIRECT CONTROL MODE*\n");
+                  HandleControl(keyInfo, ref cube);
+                  RubikUtil.PrintSidesData(cube);
+               }
+               else
+               {
+                  Console.WriteLine("*COMMAND SEQUENCE INPUT MODE*\n");
+                  RubikUtil.PrintSidesData(cube);
+
+                  cube.RotateByCommandSequence(Console.ReadLine());
+                  Console.WriteLine("\nPress any key...\n");
+                  Console.ReadKey();
+
+                  Console.Clear();
+                  Console.WriteLine("*DIRECT CONTROL MODE*\n");
+                  RubikUtil.PrintSidesData(cube);
+               }
             }
+         }
+         catch (Exception e)
+         {
+            Console.WriteLine(e);
          }
       }
 

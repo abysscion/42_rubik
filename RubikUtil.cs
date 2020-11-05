@@ -13,7 +13,7 @@ namespace Rubik
             {
                 Console.Write("         ");
                 for (var x = 0; x < 3; x++)
-                    RubikUtil.PrintColoredSymbol(colorNames[cube.Sides[(int) RSide.Up].Faces[x, y].Color].First());
+                    PrintColoredSymbol(colorNames[cube.Sides[(int) RSide.Up].Faces[x, y].Color].First());
 
                 Console.WriteLine();
             }
@@ -21,13 +21,13 @@ namespace Rubik
             for (var y = 0; y < 3; y++)
             {
                 for (var x = 0; x < 3; x++)
-                    RubikUtil.PrintColoredSymbol(colorNames[cube.Sides[(int) RSide.Left].Faces[x, y].Color].First());
+                    PrintColoredSymbol(colorNames[cube.Sides[(int) RSide.Left].Faces[x, y].Color].First());
                 for (var x = 0; x < 3; x++)
-                    RubikUtil.PrintColoredSymbol(colorNames[cube.Sides[(int) RSide.Front].Faces[x, y].Color].First());
+                    PrintColoredSymbol(colorNames[cube.Sides[(int) RSide.Front].Faces[x, y].Color].First());
                 for (var x = 0; x < 3; x++)
-                    RubikUtil.PrintColoredSymbol(colorNames[cube.Sides[(int) RSide.Right].Faces[x, y].Color].First());
+                    PrintColoredSymbol(colorNames[cube.Sides[(int) RSide.Right].Faces[x, y].Color].First());
                 for (var x = 0; x < 3; x++)
-                    RubikUtil.PrintColoredSymbol(colorNames[cube.Sides[(int) RSide.Back].Faces[x, y].Color].First());
+                    PrintColoredSymbol(colorNames[cube.Sides[(int) RSide.Back].Faces[x, y].Color].First());
                 Console.WriteLine();
             }
 
@@ -35,7 +35,7 @@ namespace Rubik
             {
                 Console.Write("         ");
                 for (var x = 0; x < 3; x++)
-                    RubikUtil.PrintColoredSymbol(colorNames[cube.Sides[(int) RSide.Down].Faces[x, y].Color].First());
+                    PrintColoredSymbol(colorNames[cube.Sides[(int) RSide.Down].Faces[x, y].Color].First());
 
                 Console.WriteLine();
             }
@@ -44,23 +44,47 @@ namespace Rubik
         public static string RotationCommandToText((RSide, RotationType) command)
         {
             var (rubikSide, rotationType) = command;
-            var txt = rubikSide switch
+            string txt;
+            
+            switch (rubikSide)
             {
-                RSide.Front => "F",
-                RSide.Left => "L",
-                RSide.Right => "R",
-                RSide.Down => "D",
-                RSide.Up => "U",
-                RSide.Back => "B",
-                _ => throw new ArgumentOutOfRangeException()
-            };
-            txt += rotationType switch
+                case RSide.Front:
+                    txt = "F";
+                    break;
+                case RSide.Left:
+                    txt = "L";
+                    break;
+                case RSide.Right:
+                    txt = "R";
+                    break;
+                case RSide.Down:
+                    txt = "D";
+                    break;
+                case RSide.Up:
+                    txt = "U";
+                    break;
+                case RSide.Back:
+                    txt = "B";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            switch (rotationType)
             {
-                RotationType.Clockwise => "",
-                RotationType.CounterClockwise => "'",
-                RotationType.Halfturn => "2",
-                _ => throw new ArgumentOutOfRangeException()
-            };
+                case RotationType.Clockwise:
+                    txt += "";
+                    break;
+                case RotationType.CounterClockwise:
+                    txt += "'";
+                    break;
+                case RotationType.Halfturn:
+                    txt += "2";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
             return txt;
         }
         
@@ -112,18 +136,32 @@ namespace Rubik
         
         public static void PrintColoredSymbol(char symbol)
         {
-            Console.BackgroundColor = Console.ForegroundColor = symbol switch
+            switch (symbol)
             {
-                'R' => ConsoleColor.Red,
-                'G' => ConsoleColor.Green,
-                'B' => ConsoleColor.Blue,
-                'Y' => ConsoleColor.Yellow,
-                'W' => ConsoleColor.White,
-                'O' => ConsoleColor.Magenta,
-                _ => Console.ForegroundColor
-            };
+                case 'R':
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    break;
+                case 'G':
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    break;
+                case 'B':
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    break;
+                case 'Y':
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    break;
+                case 'W':
+                    Console.ForegroundColor = ConsoleColor.White;
+                    break;
+                case 'O':
+                    Console.ForegroundColor = ConsoleColor.Magenta;
+                    break;
+                default:
+                    Console.ForegroundColor = Console.ForegroundColor;
+                    break;
+            }
+            Console.BackgroundColor = Console.ForegroundColor;
             Console.Write("   ");
-            // Console.Write("[{0}]", symbol);
             Console.ResetColor();
         }
     }

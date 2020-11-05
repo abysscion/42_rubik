@@ -96,16 +96,23 @@ namespace Rubik
 
         private RSide Step4GetOppositeForSide(RSide side)
         {
-            return side switch
+            switch (side)
             {
-                RSide.Front => RSide.Back,
-                RSide.Left => RSide.Right,
-                RSide.Right => RSide.Left,
-                RSide.Back => RSide.Front,
-                RSide.Down => RSide.Up,
-                RSide.Up => RSide.Down,
-                _ => throw new ArgumentOutOfRangeException(nameof(side), side, "Wrong side passed")
-            };
+                case RSide.Front:
+                    return RSide.Back;
+                case RSide.Left:
+                    return RSide.Right;
+                case RSide.Right:
+                    return RSide.Left;
+                case RSide.Back:
+                    return RSide.Front;
+                case RSide.Down:
+                    return RSide.Up;
+                case RSide.Up:
+                    return RSide.Down;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(side), side, "Wrong side passed");
+            }
         }
 
         private RSide Step4GetCorrectRightSide(ref List<RubikFace[]> triplets)
