@@ -51,9 +51,12 @@ namespace Rubik
                solver.SolveStep4();
 
                var rotations = solver.GetRotationsArray();
-               for (var i = 0; i < rotations.Length - 1; i++)
-                  Console.Write(RubikUtil.RotationCommandToText(rotations[i]) + " ");
-               Console.Write(RubikUtil.RotationCommandToText(rotations[rotations.Length - 1]) + "\n");
+               if (rotations.Length > 0)
+               {
+                  for (var i = 0; i < rotations.Length - 1; i++)
+                     Console.Write(RubikUtil.RotationCommandToText(rotations[i]) + " ");
+                  Console.Write(RubikUtil.RotationCommandToText(rotations[rotations.Length - 1]) + "\n");
+               }
                return;
             }
 
@@ -108,9 +111,12 @@ namespace Rubik
                solver.SolveStep3();
                solver.SolveStep4();
                var rotations = solver.GetRotationsArray();
-               for (var i = 0; i < rotations.Length - 1; i++)
-                  Console.Write(RubikUtil.RotationCommandToText(rotations[i]) + " ");
-               Console.Write(RubikUtil.RotationCommandToText(rotations[rotations.Length - 1]) + "\n");
+               if (rotations.Length > 0)
+               {
+                  for (var i = 0; i < rotations.Length - 1; i++)
+                     Console.Write(RubikUtil.RotationCommandToText(rotations[i]) + " ");
+                  Console.Write(RubikUtil.RotationCommandToText(rotations[rotations.Length - 1]) + "\n");
+               }
                break;
             case ConsoleKey.Q:
                cube = new RubikCube();
