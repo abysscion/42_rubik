@@ -64,7 +64,7 @@ namespace Rubik
             RubikUtil.PrintSidesData(cube);
             while (keyInfo.Key != ConsoleKey.Escape)
             {
-               keyInfo = Console.ReadKey(true);
+               keyInfo = Console.ReadKey();
                Console.Clear();
 
                if (keyInfo.Key != ConsoleKey.Tab)
